@@ -1,0 +1,8 @@
+# Dependencies
+**/node_modules/
+
+# Optional: other files and folders to ignore, e.g., environment variables, build artifacts
+.env
+/dist
+/build
+
