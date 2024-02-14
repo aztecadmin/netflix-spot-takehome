@@ -14,6 +14,7 @@ function StoreTable({ stores, emptyMessage, isLoading }: StoreTable) {
   stores.forEach((store) => {
     rows.push(<StoreRow key={store.id} store={store} />);
   });
+  // console.log({ isLoading, stores });
   if (isLoading) {
     return <h1>Loading ...</h1>;
   }

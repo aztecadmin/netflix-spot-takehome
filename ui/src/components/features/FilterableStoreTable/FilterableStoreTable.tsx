@@ -22,7 +22,8 @@ function FilterableStoreTable() {
 
   const isLoading =
     networkStatus === NetworkStatus.refetch ||
-    networkStatus === NetworkStatus.loading;
+    networkStatus === NetworkStatus.loading ||
+    networkStatus === NetworkStatus.setVariables;
 
   const isLoadingMore = networkStatus === NetworkStatus.fetchMore;
 
@@ -35,11 +36,12 @@ function FilterableStoreTable() {
   const returnedEmptyShopsList =
     data && data.getBobaShops && data.getBobaShops.shops.length === 0;
 
-  const emptyMessage = !data
-    ? "Pick a Netflix Campus"
-    : returnedEmptyShopsList
-    ? " Oh nooo ... No Boba nearby!"
-    : undefined;
+  const emptyMessage =
+    !data && !isLoading
+      ? "Pick a Netflix Campus"
+      : returnedEmptyShopsList
+      ? " Oh nooo ... No Boba nearby!"
+      : undefined;
 
   const onLocationSelected = useCallback(
     (v: string) => {
@@ -47,6 +49,7 @@ function FilterableStoreTable() {
         const filter = filterOptions.find((el) => el.value == v);
         if (filter) {
           if (hasFetchedRef.current) {
+            console.log("refetching");
             refetch({
               coordinates: filter.coordinates,
             });
