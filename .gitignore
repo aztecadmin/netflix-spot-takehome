@@ -1,6 +1,6 @@
 # Dependencies
 **/node_modules/
-
+dist/
 # Optional: other files and folders to ignore, e.g., environment variables, build artifacts
 .env
 /dist
