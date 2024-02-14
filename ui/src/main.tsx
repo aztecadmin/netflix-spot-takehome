@@ -1,10 +1,28 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+// import { offsetLimitPagination } from "@apollo/client/utilities";
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+import App from "./App.tsx";
+import "./index.css";
+
+const client = new ApolloClient({
+  uri: "http://localhost:4000/",
+  cache: new InMemoryCache({
+    // typePolicies: {
+    //   Query: {
+    //     fields: {
+    //       getBobaShops: offsetLimitPagination(),
+    //     },
+    //   },
+    // },
+  }),
+});
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  // <React.StrictMode>
+  <ApolloProvider client={client}>
     <App />
-  </React.StrictMode>,
-)
+  </ApolloProvider>
+  // </React.StrictMode>
+);

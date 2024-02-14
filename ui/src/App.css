@@ -5,7 +5,24 @@
   text-align: center;
 }
 
-.logo {
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title-text {
+  font-size: 4.2em;
+}
+
+.title-icon {
+  width: 125px;
+  height: 125px;
+  /* margin-left: 10px; */
+  translate: -20px -20px;
+}
+
+/* .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
@@ -16,7 +33,7 @@
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
-}
+} */
 
 @keyframes logo-spin {
   from {

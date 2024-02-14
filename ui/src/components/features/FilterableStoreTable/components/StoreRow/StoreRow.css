@@ -1,0 +1,34 @@
+.store-info-card {
+  display: grid;
+  width: 400px;
+  height: 190px;
+  padding: 12px;
+  text-align: left;
+  border-style: solid;
+  border-color: var(--border-color--primary);
+  border-width: 2px;
+  border-radius: 10px;
+  /* border-color: color(srgb rgb(53, 164, 158) green blue); */
+}
+
+.store-name {
+  text-align: left;
+  font-size: var(--font-size-large);
+}
+
+.rating-container {
+  font-size: var(--font-size-base);
+  display: flex;
+  gap: 15px;
+}
+
+.rating-header {
+}
+
+.rating-value {
+}
+
+.address-street,
+.address-container {
+  font-size: var(--font-size-small);
+}

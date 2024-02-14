@@ -1,0 +1,18 @@
+.table-radio-container {
+  display: flex;
+  gap: 10px;
+  height: 75px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  align-items: center;
+}
+
+.filter-store-table-wrapper {
+}
+.store-table-wrapper {
+  overflow: scroll;
+  position: relative;
+  height: 60vh;
+  width: 50vw;
+  border: 1px solid #ccc;
+}

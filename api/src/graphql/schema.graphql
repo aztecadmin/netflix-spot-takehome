@@ -1,0 +1,37 @@
+type Shop {
+  id: String!
+  name: String!
+  rating: String
+  location: Location!
+  distance: Float
+}
+
+type Location {
+  address: String
+  city: String
+  state: String
+  zip_code: String
+}
+
+input Coordinates {
+  latitude: Float!
+  longitude: Float!
+}
+
+enum SortField {
+  rating
+  distance
+}
+
+type GetBobaShopQueryResult {
+  shops: [Shop]!
+  total: Float!
+}
+
+type Query {
+  getBobaShops(
+    coordinates: Coordinates
+    sort_by: SortField
+    offset: Float
+  ): GetBobaShopQueryResult!
+}
