@@ -19,6 +19,8 @@ I intended to create docker files for both the ui and api and a docker-compose s
 
 Running both the ui and api should be relatively straightforward. From either sub-directory (ui or api) run `npm install`.
 
+Start off on the main branch.
+
 - Command to run the ui in dev mode: `npm run dev`
 - Command to run the api: `npm run start`
 
