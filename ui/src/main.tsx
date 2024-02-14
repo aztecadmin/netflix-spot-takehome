@@ -8,21 +8,13 @@ import "./index.css";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000/",
-  cache: new InMemoryCache({
-    // typePolicies: {
-    //   Query: {
-    //     fields: {
-    //       getBobaShops: offsetLimitPagination(),
-    //     },
-    //   },
-    // },
-  }),
+  cache: new InMemoryCache({}),
 });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  // <React.StrictMode>
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
-  // </React.StrictMode>
+  <React.StrictMode>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </React.StrictMode>
 );

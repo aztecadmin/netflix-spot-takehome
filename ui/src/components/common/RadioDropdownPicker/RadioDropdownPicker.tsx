@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import "./RadioDropdownPicker.css";
 
@@ -13,6 +13,7 @@ export type RadioDropdownPickerProps = {
   onOptionSelected: (value: string) => void;
   messageWhenSelected?: string;
   messageWhenUnselected?: string;
+  disabled?: boolean;
 };
 
 function RadioDropdownPicker({
@@ -20,14 +21,13 @@ function RadioDropdownPicker({
   onOptionSelected,
   messageWhenSelected,
   messageWhenUnselected,
+  disabled,
 }: RadioDropdownPickerProps) {
   const [selectedOption, setSelectedOption] = useState<string>();
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
 
   const displayMessageWhenSelected = messageWhenSelected || "Selected";
   const displayMessageWhenUnselected = messageWhenUnselected || "Select Option";
-
-  const [isMounted, setIsMounted] = useState(false);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -41,23 +41,13 @@ function RadioDropdownPicker({
     setIsDropdownVisible((prevIsDropDownVisible) => !prevIsDropDownVisible);
   };
 
-  useEffect(() => {
-    if (!isMounted) {
-      const defaultOption = options.find((el) => el.default === true);
-      if (defaultOption) {
-        onOptionSelected(defaultOption.value);
-        setSelectedOption(defaultOption.value);
-      }
-      setIsMounted(true);
-    }
-  }, [isMounted, onOptionSelected, options]);
-
   return (
     <div className="dropdown" data-testid="dropdown">
-      <div
+      <button
         className="dropdown-selector"
         data-testid="dropdown-selector"
         onClick={toggleDropdown}
+        disabled={disabled}
       >
         {`${
           selectedOption
@@ -66,7 +56,7 @@ function RadioDropdownPicker({
               options.find((option) => option.value === selectedOption)?.label
             : displayMessageWhenUnselected
         }`}
-      </div>
+      </button>
       {isDropdownVisible && (
         <div className="dropdown-options" data-testid="dropdown-options">
           {options.map((detail) => (

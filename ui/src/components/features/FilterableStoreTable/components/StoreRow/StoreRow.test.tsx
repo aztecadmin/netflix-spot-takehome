@@ -4,9 +4,10 @@ import { afterEach, describe, expect, test } from "vitest";
 
 import StoreRow from "./";
 
-import { bobaShops as mockBobaShopsBody } from "@/graphql/mocks";
+import { mockBobaShops as mockBobaShopsBody } from "@/graphql/mocks";
 
-const mockBobaShops = mockBobaShopsBody.data.getBobaShops.shops;
+const mockBobaShops =
+  mockBobaShopsBody.WITH_LOCATION_FILTER.result.data.getBobaShops.shops;
 
 afterEach(cleanup);
 

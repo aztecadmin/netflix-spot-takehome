@@ -8,11 +8,12 @@
 }
 
 .filter-store-table-wrapper {
+  width: 60vw;
 }
 .store-table-wrapper {
   overflow: scroll;
   position: relative;
   height: 60vh;
-  width: 50vw;
+  /* width: 50vw; */
   border: 1px solid #ccc;
 }

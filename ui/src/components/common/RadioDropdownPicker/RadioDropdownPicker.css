@@ -12,12 +12,12 @@
   border-radius: 5px;
   background-color: var(--background-color);
   cursor: pointer;
-  transition: border-color 0.25s;
+  /* transition: border-color 0.25s; */
 }
 
-.dropdown-selector:hover {
+/* .dropdown-selector:hover {
   border-color: #646cff;
-}
+} */
 
 .dropdown-options {
   position: absolute;

@@ -4,6 +4,9 @@ import { readFileSync } from "fs";
 import { resolvers, YelpAPI } from "./src/graphql/index.js";
 import { ContextValue } from "./src/graphql/resolvers.js";
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const typeDefs = readFileSync("./src/graphql/schema.graphql", {
   encoding: "utf-8",
 });
@@ -20,9 +23,7 @@ const { url } = await startStandaloneServer(server, {
       dataSources: {
         yelpAPI: new YelpAPI({
           cache,
-          // TODO: Extract this to env variable
-          token:
-            "Bearer B6vnjJXNjHKEkNbCjB1JegizzLe2H0hKBejFaiC_x5BuYfVVeitgNVy1WsxYeUp_NcYte-BZJKro4rHdh3BJreao4ZFoqa96FG_b9HK4qscwGWqLIiL0k08yOfDLZXYx",
+          token: `Bearer ${process.env.YELP_API_KEY}`,
         }),
       },
     };

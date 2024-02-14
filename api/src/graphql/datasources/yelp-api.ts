@@ -41,8 +41,6 @@ class YelpAPI extends RESTDataSource {
 
     const data = await this.get("v3/businesses/search", { params });
 
-    console.log("data", data);
-
     return {
       shops: data?.businesses || [],
       total: data?.total,

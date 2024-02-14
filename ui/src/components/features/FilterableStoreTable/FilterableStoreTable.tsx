@@ -1,65 +1,30 @@
-// import { useEffect } from "react";
-import { useLazyQuery } from "@apollo/client";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useLazyQuery, NetworkStatus } from "@apollo/client";
+
 import { GET_BOBA_SHOPS_QUERY } from "@/graphql/queries";
 import { Shop } from "@/__generated__gql__/graphql";
 
 import RadioDropdownPicker from "@/components/common/RadioDropdownPicker";
 import StoreTable from "./components/StoreTable";
 
+import { filterOptions, sortOptions } from "./configs/filterSortOptions";
+
 import "./FilterableStoreTable.css";
-import { useCallback, useEffect, useRef, useState } from "react";
-
-// Note: In a future, production grade version of this app,
-// "sortOptions" and "filterOptions" could come from a remote
-// server call on first app load and be dynamically built by
-// the frontend using some generic template cruncher
-
-const sortOptions = [
-  {
-    label: "Rating",
-    value: "rating",
-  },
-  {
-    label: "Distance",
-    value: "distance",
-  },
-];
-
-const filterOptions = [
-  {
-    label: "121 Albright Way, Los Gatos, CA 95032",
-    value: "option-1",
-    default: true,
-    coordinates: {
-      latitude: 37.2570376,
-      longitude: -121.9665658,
-    },
-  },
-  {
-    label: "888 Broadway, New York, NY 10003",
-    value: "option-2",
-    coordinates: {
-      latitude: 40.7382917,
-      longitude: 73.9922788,
-    },
-  },
-  {
-    label: "5808 Sunset Blvd, Los Angeles, CA 90028",
-    value: "option-3",
-    coordinates: {
-      latitude: 34.0977378,
-      longitude: -118.318907,
-    },
-  },
-];
 
 function FilterableStoreTable() {
-  // Shouldn't be hardcoded but leaving for now to focus on testing
-  const [getBobaShops, { data, fetchMore, refetch }] =
-    useLazyQuery(GET_BOBA_SHOPS_QUERY);
+  const [getBobaShops, { data, fetchMore, refetch, networkStatus }] =
+    useLazyQuery(GET_BOBA_SHOPS_QUERY, {
+      notifyOnNetworkStatusChange: true,
+    });
 
   const [hasFetched, setHasFetched] = useState(false);
   const hasFetchedRef = useRef(hasFetched);
+
+  const isLoading =
+    networkStatus === NetworkStatus.refetch ||
+    networkStatus === NetworkStatus.loading;
+
+  const isLoadingMore = networkStatus === NetworkStatus.fetchMore;
 
   const shouldShowLoadMoreButton =
     data &&
@@ -67,47 +32,61 @@ function FilterableStoreTable() {
     data.getBobaShops.total &&
     data.getBobaShops.total > data.getBobaShops.shops.length;
 
-  // This is a part of the dependency array of a useEffect hook
-  // in the RadioDropdownPicker (premature optimization)
-  const onLocationSelected = useCallback((v: string) => {
-    {
-      const filter = filterOptions.find((el) => el.value == v);
-      if (filter) {
-        if (hasFetchedRef.current) {
-          refetch({
-            coordinates: filter.coordinates,
-          });
-        } else {
-          getBobaShops({
-            variables: {
+  const returnedEmptyShopsList =
+    data && data.getBobaShops && data.getBobaShops.shops.length === 0;
+
+  const emptyMessage = !data
+    ? "Pick a Netflix Campus"
+    : returnedEmptyShopsList
+    ? " Oh nooo ... No Boba nearby!"
+    : undefined;
+
+  const onLocationSelected = useCallback(
+    (v: string) => {
+      {
+        const filter = filterOptions.find((el) => el.value == v);
+        if (filter) {
+          if (hasFetchedRef.current) {
+            refetch({
               coordinates: filter.coordinates,
-            },
-          });
-          setHasFetched(true);
+            });
+          } else {
+            getBobaShops({
+              variables: {
+                coordinates: filter.coordinates,
+              },
+            });
+            setHasFetched(true);
+          }
         }
       }
-    }
-  }, []);
+    },
+    [getBobaShops, refetch]
+  );
 
   useEffect(() => {
     hasFetchedRef.current = hasFetched;
   });
 
-  // This is a part of the dependency array of a useEffect hook
-  // in the RadioDropdownPicker (premature optimization)
-  const onSortSelected = useCallback((v: string) => {
-    const sort_by = sortOptions.find((el) => el.value == v);
-    if (sort_by) {
-      refetch({
-        // @ts-expect-error TODO: Why is type check failing?
-        sort_by: sort_by.value,
-        // Possibly related to sort_by being defined as an enum
-      });
-    }
-  }, []);
+  const onSortSelected = useCallback(
+    (v: string) => {
+      const sort_by = sortOptions.find((el) => el.value == v);
+      if (sort_by) {
+        refetch({
+          // @ts-expect-error TODO: Why is type check failing?
+          sort_by: sort_by.value,
+          // Possibly related to sort_by being defined as an enum
+        });
+      }
+    },
+    [refetch]
+  );
 
   return (
-    <div className="filter-store-table-wrapper">
+    <div
+      className="filter-store-table-wrapper"
+      data-testid="filterable-store-table"
+    >
       <div className="table-radio-container">
         <RadioDropdownPicker
           options={filterOptions}
@@ -120,18 +99,28 @@ function FilterableStoreTable() {
           onOptionSelected={onSortSelected}
           messageWhenUnselected="Choose Sort Option"
           messageWhenSelected="Sorting by"
+          disabled={!hasFetchedRef.current}
         />
       </div>
       <div className="store-table-wrapper">
-        <StoreTable stores={(data?.getBobaShops?.shops as Shop[]) || []} />
+        <StoreTable
+          data-testid="store-table"
+          emptyMessage={emptyMessage}
+          isLoading={isLoading}
+          stores={(data?.getBobaShops?.shops as Shop[]) || []}
+        />
 
         <button
           style={{ display: shouldShowLoadMoreButton ? "initial" : "none" }}
+          disabled={isLoadingMore}
+          // TODO: Put onClick in a callback
           onClick={() => {
             fetchMore({
               variables: {
                 offset: data!.getBobaShops!.shops!.length,
               },
+              // This is our pagination logic
+              // Also needs debouncing logic
               updateQuery: (prev, { fetchMoreResult }) => {
                 if (!fetchMoreResult) return prev;
                 return {

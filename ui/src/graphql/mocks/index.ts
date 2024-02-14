@@ -1,3 +1,3 @@
-import bobaShops from "./bobaShops";
+import { mockBobaShops } from "./bobaShops";
 
-export { bobaShops };
+export { mockBobaShops };
