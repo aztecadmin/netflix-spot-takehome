@@ -7,7 +7,7 @@ import App from "./App.tsx";
 import "./index.css";
 
 const client = new ApolloClient({
-  uri: "http://139.144.190.9:4000/",
+  uri: "https://seahorse-app-ykag6.ondigitalocean.app/",
   cache: new InMemoryCache({}),
 });
 
