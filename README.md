@@ -37,7 +37,7 @@ My main concerns were typing my data accurately on the UI, file structure manage
 
 As mentioned earlier, I was able to automatically generate typescript types for my graphql entities by leveraging the graphql-codegen command line interface.
 
-I would have liked to have spent more time writing better tests, implementing a style theme, and further modularizing aspects of how the code fetches "config" data: for example, I currently hardcode the Netflix locations within the UI, but it would be better to fetch this and potentially other configuration related items from the backend upon startup of the app. Thus, it would have been better if I had created a processor to handle remote configuration, even if I were to have leveraged mock configs in the interim.
+I would have liked to have spent more time writing better tests, implementing a style theme, making the app mobile-friendly and responsive, and further modularizing aspects of how the code fetches "config" data: for example, I currently hardcode the Netflix locations within the UI, but it would be better to fetch this and potentially other configuration related items from the backend upon startup of the app. Thus, it would have been better if I had created a processor to handle remote configuration, even if I were to have leveraged mock configs in the interim.
 
 ### Project Structure
 
