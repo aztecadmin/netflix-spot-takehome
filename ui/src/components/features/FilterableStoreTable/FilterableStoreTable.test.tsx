@@ -148,7 +148,7 @@ describe("Tests for FilterableStoreTable component", async () => {
     });
   });
 
-  test("Refetch/Paginate fired when Load More button selected", async () => {
+  test("Refetch/Paginate fired and resolves with data when Load More button selected", async () => {
     renderWithMockProvider(mocks);
     await selectNetflixOffice("121 Albright Way, Los Gatos, CA 95032");
 
