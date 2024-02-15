@@ -27,8 +27,8 @@ Running both the ui and api should be relatively straightforward.
    2. Point the UI to your Apollo Client by defining the `VITE_APOLLO_CLIENT_URL` in a `.env` file from within the `ui` folder first before running the UI .
 
 4. Run the project
-   1. Run the ui in dev mode: `npm run dev`
-   2. Run the api `npm run start`
+   1. First run the api `npm run start`
+   2. Then run the ui in dev mode: `npm run dev`
   
 5. Run UI tests
    1. Run `npm run test` from within the `ui` directory. 
