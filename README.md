@@ -66,7 +66,7 @@ I chose to leverage Apollo GraphQL (server and client) to pass data between the 
 
 Apollo was extremely useful. I was able to generate typescript types that were consumable on the frontend which made the development process very comfortable.
 
-You can view the Apollo graphql explorer at :4000 of either your local version of the app or the live version (see above for live url).
+You can view the Apollo graphql explorer at port `:4000` of  your local version of the app.
 
 ### Learnings
 
