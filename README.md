@@ -2,8 +2,7 @@
 
 **Author:** Amanuel Zeryihun
 
-**Live Link:** [http://139.144.190.9:5173/](http://139.144.190.9:5173/)
-Note: This is not an HTTPS site.
+**Live Link:** [https://king-prawn-app-94dui.ondigitalocean.app/](https://king-prawn-app-94dui.ondigitalocean.app/)
 
 ## About the project
 
