@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-// A hook to make it easy to check if an html element
+// A hook to make it easy to check if an html element is no longer in focus
 const useOutsideClick = (ref: React.RefObject<HTMLElement>, cb: () => void) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
