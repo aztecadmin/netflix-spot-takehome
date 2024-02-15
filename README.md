@@ -16,18 +16,20 @@ I chose to use React + Typescript + [Vite](https://vitejs.dev/) for the client s
 
 I intended to create docker files for both the ui and api and a docker-compose script to host their corresponding images in a local container, but I ran into some issues with vitest and didn't want to prolong my submission.
 
-Running both the ui and api should be relatively straightforward. From either sub-directory (ui or api) run `npm install`.
+Running both the ui and api should be relatively straightforward. 
 
-Start off on the main branch.
+1. Clone from the main branch.
 
-- Command to run the ui in dev mode: `npm run dev`
-- Command to run the api: `npm run start`
+2. Run `npm install` in both sub-directories (ui and api).
 
-**Note** that you need to store your Yelp API key as an environment variable from within the api folder first before running the api server.
+3. Setup the correct Environment Variables
+   1. Store your Yelp API key as an environment variable `YELP_API_KEY` in a `.env` file from within the api folder first before running the api server`.
+   2. Point the UI to your Apollo Client by defining the `VITE_APOLLO_CLIENT_URL` in a `.env` file from within the ui folder first before running the UI .
 
-export YELP_API_KEY
-
-Or if you'd like to manually replace the api key in the api code, replace the env reference with your key inside of the entry file at line 26.
+4. Run the project
+   1. Run the ui in dev mode: `npm run dev`
+   2. Run the api `npm run start`
+      
 
 ### How I spent my time
 
