@@ -23,12 +23,15 @@ Running both the ui and api should be relatively straightforward.
 2. Run `npm install` in both sub-directories (ui and api).
 
 3. Setup the correct Environment Variables
-   1. Store your Yelp API key as an environment variable `YELP_API_KEY` in a `.env` file from within the api folder first before running the api server`.
-   2. Point the UI to your Apollo Client by defining the `VITE_APOLLO_CLIENT_URL` in a `.env` file from within the ui folder first before running the UI .
+   1. Store your Yelp API key as an environment variable `YELP_API_KEY` in a `.env` file from within the `api` folder first before running the api server`.
+   2. Point the UI to your Apollo Client by defining the `VITE_APOLLO_CLIENT_URL` in a `.env` file from within the `ui` folder first before running the UI .
 
 4. Run the project
    1. Run the ui in dev mode: `npm run dev`
    2. Run the api `npm run start`
+  
+5. Run UI tests
+   1. Run `npm run test` from within the `ui` directory. 
       
 
 ### How I spent my time
