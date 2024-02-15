@@ -6,7 +6,7 @@
 
 ## About the project
 
-This application is submitted for review as part of the interview process for the L5 senior full stack engineer position at Netflix. The code was written entirely by I, Amanuel Zeryihun.
+This project is submitted for review as part of the interview process for the L5 senior full stack engineer position at Netflix. The code was written entirely by I, Amanuel Zeryihun.
 
 ### Frameworks
 
