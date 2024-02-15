@@ -19,6 +19,10 @@
 
   --border-color--primary: #ff9d28;
   --background-color: #242424;
+
+  --breakpoint-sm: 390px;
+  --breakpoint-sm: 390px;
+  --breakpoint-md: 768px;
 }
 
 a {

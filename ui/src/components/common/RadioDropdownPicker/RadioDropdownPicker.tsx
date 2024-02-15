@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import useOutsideClick from "@/components/common/hooks/useOutsideClick";
 
 import "./RadioDropdownPicker.css";
 
@@ -29,6 +30,8 @@ function RadioDropdownPicker({
   const displayMessageWhenSelected = messageWhenSelected || "Selected";
   const displayMessageWhenUnselected = messageWhenUnselected || "Select Option";
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -37,12 +40,15 @@ function RadioDropdownPicker({
     setIsDropdownVisible(false);
   };
 
-  const toggleDropdown = () => {
+  const toggleDropdown = () =>
     setIsDropdownVisible((prevIsDropDownVisible) => !prevIsDropDownVisible);
-  };
+
+  const hideComponent = () => setIsDropdownVisible(false);
+
+  useOutsideClick(dropdownRef, hideComponent);
 
   return (
-    <div className="dropdown" data-testid="dropdown">
+    <div className="dropdown" data-testid="dropdown" ref={dropdownRef}>
       <button
         className="dropdown-selector"
         data-testid="dropdown-selector"
