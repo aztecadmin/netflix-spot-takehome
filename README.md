@@ -18,6 +18,8 @@ I intended to create docker files for both the ui and api and a docker-compose s
 
 Running both the ui and api should be relatively straightforward. 
 
+**(Use Node v18.17.1 or better)**
+
 1. Clone from the main branch.
 
 2. Run `npm install` in both sub-directories (ui and api).
