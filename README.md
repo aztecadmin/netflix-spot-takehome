@@ -29,22 +29,29 @@ Running both the ui and api should be relatively straightforward.
    2. Point the UI to your Apollo Client by defining the `VITE_APOLLO_CLIENT_URL` in a `.env` file from within the `ui` folder first before running the UI .
 
 4. Run the project
-   1. First run the api `npm run start` from within the `api` folder
-   2. Then run the ui in dev mode: `npm run dev` from within the `ui` folder
+   1. First run the api `npm run start` from within the `api` folder (Note: You can view the Apollo graphql explorer at port `:4000` of  your local version of the app.) 
+   3. Then run the ui in dev mode: `npm run dev` from within the `ui` folder
   
 5. Run UI tests
-   1. Run `npm run test` from within the `ui` directory. 
-      
+   1. Run `npm run test` from within the `ui` directory.
+
 
 ### How I spent my time
 
 My time was spent mainly on the UI (70%), although setting up the Apollo server took meaningful effort.
 
-My main concerns were typing my data accurately on the UI, file structure management, creating a healthy level of modularity in the component design and testing.
+My main concerns were using accurate types for my data on the UI, file structure management, creating a healthy level of modularity in the component design and testing.
 
-As mentioned earlier, I was able to automatically generate typescript types for my graphql entities by leveraging the graphql-codegen command line interface.
+I would have liked to spent more time doing the following
 
-I would have liked to have spent more time writing better tests, implementing a style theme, making the app mobile-friendly and responsive, and further modularizing aspects of how the code fetches "config" data: for example, I currently hardcode the Netflix locations within the UI, but it would be better to fetch this and potentially other configuration related items from the backend upon startup of the app. Thus, it would have been better if I had created a processor to handle remote configuration, even if I were to have leveraged mock configs in the interim. Also, I would further modularize my different table components. At the moment they are tightly coupled to the business logic and aren't reusable. It's helpful to take this step after creating the initial mockup, which is essentially the path that I'm on. Lastly, I'd need to fix the naming conventions for "Shop" and "Store". At some point, I started using these terms interchangeably and made a note to fix this but never got back to it.
+- Improving tests by adding more coverage and using more robust methods of accessing html elements within tests;
+- Creating more modularity around constant names throughout the app
+- Implementing error handling throughout the app
+- Implementing a style theme
+- Making the app mobile-friendly and responsive
+- Further modularizing aspects of how the code fetches "config" data: for example, I currently hardcode the Netflix locations within the UI, but it would be better to fetch this and potentially other configuration related items from the backend upon startup of the app.
+- Further modularize my different table components depending on additional use cases that the app needs to support (e.g. the user can search more than just boba).
+- Choose and stick to a correct naming convention for "Store" and "Shop". (At some point, I started using these terms interchangeably and made a note to fix this but never got back to it.)
 
 ### Project Structure
 
@@ -60,15 +67,13 @@ Component level tests are stored within each component's container folder.
 
 I wrote my tests using [Vitest](https://vitest.dev/) in conjunction with Jest, and React testing library.
 
-I wrote extensive tests for FilterableTableComponent. These tests are essentially integration tests to make sure that data fetching and pagination act as expected in response to various user interactions with the "atomic" components that make up the page.
+I wrote tests for all common and feature level components. I wrote the most extensive tests for FilterableTableComponent because that is where most of the complexity in the app lies. FilterableTableComponent tests are essentially e2e tests that make sure that data fetching and pagination act as expected in response to various user interactions with its constituent "atomic" components.
 
 ### Data fetching
 
 I chose to leverage Apollo GraphQL (server and client) to pass data between the server and client.
 
 Apollo was extremely useful. I was able to generate typescript types that were consumable on the frontend which made the development process very comfortable.
-
-You can view the Apollo graphql explorer at port `:4000` of  your local version of the app.
 
 ### Learnings
 
