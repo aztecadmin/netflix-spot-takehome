@@ -15,6 +15,7 @@ export type RadioDropdownPickerProps = {
   messageWhenSelected?: string;
   messageWhenUnselected?: string;
   disabled?: boolean;
+  defaultValue?: string;
 };
 
 function RadioDropdownPicker({
@@ -23,8 +24,11 @@ function RadioDropdownPicker({
   messageWhenSelected,
   messageWhenUnselected,
   disabled,
+  defaultValue,
 }: RadioDropdownPickerProps) {
-  const [selectedOption, setSelectedOption] = useState<string>();
+  const [selectedOption, setSelectedOption] = useState<string | undefined>(
+    defaultValue
+  );
   const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
 
   const displayMessageWhenSelected = messageWhenSelected || "Selected";
@@ -70,7 +74,11 @@ function RadioDropdownPicker({
               <input
                 type="radio"
                 value={detail.value}
-                checked={selectedOption === detail.value}
+                checked={
+                  selectedOption
+                    ? selectedOption === detail.value
+                    : detail.default
+                }
                 onChange={handleChange}
               />
               {detail.label}

@@ -2,7 +2,7 @@ import { cleanup, render, screen } from "@testing-library/react";
 
 import { afterEach, describe, expect, test } from "vitest";
 
-import StoreRow from "./";
+import StoreCard from ".";
 
 import { mockBobaShops as mockBobaShopsBody } from "@/graphql/mocks";
 
@@ -16,7 +16,7 @@ describe("Tests for StoreRow component", async () => {
 
   test("StoreRow component renders correct content", async () => {
     render(
-      <StoreRow
+      <StoreCard
         store={{
           ...mockBobaShops[0],
         }}

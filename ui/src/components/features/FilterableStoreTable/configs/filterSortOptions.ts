@@ -18,7 +18,6 @@ export const filterOptions = [
   {
     label: "121 Albright Way, Los Gatos, CA 95032",
     value: "option-1",
-    default: true,
     coordinates: {
       latitude: 37.2570376,
       longitude: -121.9665658,

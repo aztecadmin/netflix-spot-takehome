@@ -10,7 +10,7 @@
 .filter-store-table-wrapper {
   width: 60vw;
 }
-.store-table-wrapper {
+.list-view-wrapper {
   overflow: scroll;
   position: relative;
   height: 60vh;

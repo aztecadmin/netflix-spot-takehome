@@ -1,31 +1,27 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useLazyQuery, NetworkStatus } from "@apollo/client";
+import { useCallback, useEffect, useState } from "react";
 
 import { GET_BOBA_SHOPS_QUERY } from "@/graphql/queries";
 import { Shop } from "@/__generated__gql__/graphql";
 
+import useCustomLazyQuery from "@/components/common/hooks/useCustomLazyQuery"; //consider re-organizing hooks by domain
+
 import RadioDropdownPicker from "@/components/common/RadioDropdownPicker";
-import StoreTable from "./components/StoreTable";
+import ListView from "@/components/common/ListView";
+
+import StoreRow from "./components/StoreCard";
 
 import { filterOptions, sortOptions } from "./configs/filterSortOptions";
 
 import "./FilterableStoreTable.css";
 
-function FilterableStoreTable() {
-  const [getBobaShops, { data, fetchMore, refetch, networkStatus }] =
-    useLazyQuery(GET_BOBA_SHOPS_QUERY, {
-      notifyOnNetworkStatusChange: true,
-    });
-
+function FilterableStoreList() {
   const [hasFetched, setHasFetched] = useState(false);
-  const hasFetchedRef = useRef(hasFetched);
 
-  const isLoading =
-    networkStatus === NetworkStatus.refetch ||
-    networkStatus === NetworkStatus.loading ||
-    networkStatus === NetworkStatus.setVariables;
+  const { runQuery, data, refetch, fetchMore, isLoading, isLoadingMore } =
+    useCustomLazyQuery(GET_BOBA_SHOPS_QUERY);
 
-  const isLoadingMore = networkStatus === NetworkStatus.fetchMore;
+  const defaultFilterValue = filterOptions[0].value;
+  const defaultSortValue = sortOptions[0].value;
 
   const shouldShowLoadMoreButton =
     data &&
@@ -46,17 +42,18 @@ function FilterableStoreTable() {
   const onLocationSelected = useCallback(
     (v: string) => {
       {
-        const filter = filterOptions.find((el) => el.value == v);
-        if (filter) {
-          if (hasFetchedRef.current) {
-            console.log("refetching");
+        const location = filterOptions.find((el) => el.value == v);
+        if (location) {
+          if (hasFetched) {
             refetch({
-              coordinates: filter.coordinates,
+              coordinates: location.coordinates,
             });
           } else {
-            getBobaShops({
+            runQuery({
               variables: {
-                coordinates: filter.coordinates,
+                coordinates: location.coordinates,
+                // @ts-expect-error TODO: Why is type check failing?
+                sort_by: defaultSortValue,
               },
             });
             setHasFetched(true);
@@ -64,12 +61,8 @@ function FilterableStoreTable() {
         }
       }
     },
-    [getBobaShops, refetch]
+    [hasFetched, refetch, runQuery, defaultSortValue]
   );
-
-  useEffect(() => {
-    hasFetchedRef.current = hasFetched;
-  });
 
   const onSortSelected = useCallback(
     (v: string) => {
@@ -85,6 +78,36 @@ function FilterableStoreTable() {
     [refetch]
   );
 
+  const paginate = useCallback(() => {
+    fetchMore({
+      variables: {
+        offset: data?.getBobaShops.shops.length || 0,
+      },
+      // TODO: Add debouncing logic
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return {
+          ...fetchMoreResult,
+          getBobaShops: {
+            ...fetchMoreResult.getBobaShops,
+            shops: [
+              ...prev.getBobaShops.shops,
+              ...fetchMoreResult.getBobaShops.shops,
+            ],
+          },
+        };
+      },
+    });
+  }, [fetchMore, data]);
+
+  useEffect(() => {
+    onLocationSelected(filterOptions[0]?.value);
+  }, [onLocationSelected]);
+
+  const renderListItem = (item: Shop) => (
+    <StoreRow key={item.id} store={item} />
+  );
+
   return (
     <div
       className="filter-store-table-wrapper"
@@ -93,52 +116,33 @@ function FilterableStoreTable() {
       <div className="table-radio-container">
         <RadioDropdownPicker
           options={filterOptions}
+          defaultValue={defaultFilterValue}
           onOptionSelected={onLocationSelected}
           messageWhenUnselected="Choose Netflix Campus"
           messageWhenSelected="Showing Stores Near"
         />
         <RadioDropdownPicker
           options={sortOptions}
+          defaultValue={defaultSortValue}
           onOptionSelected={onSortSelected}
           messageWhenUnselected="Choose Sort Option"
           messageWhenSelected="Sorting by"
-          disabled={!hasFetchedRef.current}
+          disabled={!hasFetched}
         />
       </div>
-      <div className="store-table-wrapper">
-        <StoreTable
-          data-testid="store-table"
+      <div className="list-view-wrapper">
+        <ListView
           emptyMessage={emptyMessage}
           isLoading={isLoading}
-          stores={(data?.getBobaShops?.shops as Shop[]) || []}
+          data={(data?.getBobaShops?.shops as Shop[]) || []}
+          renderListItem={renderListItem}
         />
 
         <button
-          style={{ display: shouldShowLoadMoreButton ? "initial" : "none" }}
+          // style={{ display: shouldShowLoadMoreButton ? "initial" : "none" }}
+          hidden={!shouldShowLoadMoreButton}
           disabled={isLoadingMore}
-          // TODO: Put onClick in a callback
-          onClick={() => {
-            fetchMore({
-              variables: {
-                offset: data!.getBobaShops!.shops!.length,
-              },
-              // This is our pagination logic
-              // Also needs debouncing logic
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) return prev;
-                return {
-                  ...fetchMoreResult,
-                  getBobaShops: {
-                    ...fetchMoreResult.getBobaShops,
-                    shops: [
-                      ...prev.getBobaShops.shops,
-                      ...fetchMoreResult.getBobaShops.shops,
-                    ],
-                  },
-                };
-              },
-            });
-          }}
+          onClick={paginate}
         >
           Load More
         </button>
@@ -147,4 +151,4 @@ function FilterableStoreTable() {
   );
 }
 
-export default FilterableStoreTable;
+export default FilterableStoreList;

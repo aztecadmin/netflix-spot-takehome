@@ -1,15 +1,14 @@
 import { memo } from "react";
 import { Shop } from "@/__generated__gql__/graphql";
-import "./StoreRow.css";
+import "./StoreCard.css";
 
 import { isNumber } from "@/helpers";
 
-export type StoreRowProps = {
+export type StoreCardProps = {
   store: Shop;
 };
 
-function StoreRow({ store }: StoreRowProps) {
-  // console.log("StoreRow rendered");
+function StoreCard({ store }: StoreCardProps) {
   return (
     <div className="store-info-card" data-testid="store-info-card">
       <div className="store-name">{store.name}</div>
@@ -28,6 +27,6 @@ function StoreRow({ store }: StoreRowProps) {
   );
 }
 
-const MemoStoreRow = memo(StoreRow);
+const MemoStoreCard = memo(StoreCard);
 
-export default MemoStoreRow;
+export default MemoStoreCard;
