@@ -6,7 +6,6 @@ import "./RadioDropdownPicker.css";
 export type RadioDropdownPickerOption = {
   label: string;
   value: string;
-  default?: boolean;
 };
 
 export type RadioDropdownPickerProps = {
@@ -55,7 +54,7 @@ function RadioDropdownPicker({
     <div className="dropdown" data-testid="dropdown" ref={dropdownRef}>
       <button
         className="dropdown-selector"
-        data-testid="dropdown-selector"
+        data-testid="dropdown-btn-selector"
         onClick={toggleDropdown}
         disabled={disabled}
       >
@@ -77,7 +76,7 @@ function RadioDropdownPicker({
                 checked={
                   selectedOption
                     ? selectedOption === detail.value
-                    : detail.default
+                    : detail.value == defaultValue
                 }
                 onChange={handleChange}
               />

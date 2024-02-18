@@ -41,7 +41,7 @@ function renderRadioDropdownPicker(
       onOptionSelected={mockFn}
     />
   );
-  const radioDropdownPicker = screen.getByTestId("dropdown-selector");
+  const radioDropdownPicker = screen.getByTestId("dropdown-btn-selector");
   return { radioDropdownPicker, mockFn };
 }
 

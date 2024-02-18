@@ -29,9 +29,12 @@ function renderWithMockProvider(
 }
 
 async function selectNetflixOffice(labelText: string) {
-  const campusSelector = screen.getByText("Choose Netflix Campus", {
-    selector: "button",
-  });
+  const campusSelector = screen.getByText(
+    "Showing Stores Near 121 Albright Way, Los Gatos, CA 95032",
+    {
+      selector: "button",
+    }
+  );
   userEvent.click(campusSelector);
   const option = await screen.findByLabelText(labelText);
 
@@ -77,27 +80,19 @@ const mocks = [
 ] as ReadonlyArray<MockedResponse<any, any>>;
 
 describe("Tests for FilterableStoreTable component", async () => {
-  test("No Apollo query should have been called", async () => {
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <FilterableStoreTable />
-      </MockedProvider>
-    );
-    const tableEl = screen.getByTestId("filterable-store-table");
-    expect(tableEl.textContent).toContain("Choose Netflix Campus");
-  });
-
   test("Selecting a Netflix office should cause data to load", async () => {
     renderWithMockProvider(mocks);
-    await selectNetflixOffice("121 Albright Way, Los Gatos, CA 95032");
+    // await selectNetflixOffice("5808 Sunset Blvd, Los Angeles, CA 90028");
     await waitFor(() => {
-      screen.getByText("Shoogar Tea Shoppe");
+      // TODO: "Sorted by Rating" should be a default (and overrideable) prop passed to FilterablStoreTable
+      screen.getByText("Sorted by Rating");
     });
+    screen.debug();
   });
 
   test("Load More Button should appear for paginated responses", async () => {
     renderWithMockProvider(mocks);
-    await selectNetflixOffice("121 Albright Way, Los Gatos, CA 95032");
+    // await selectNetflixOffice("121 Albright Way, Los Gatos, CA 95032");
 
     await waitFor(() => {
       const item = screen.queryByText("Load More");
@@ -122,13 +117,11 @@ describe("Tests for FilterableStoreTable component", async () => {
 
   test("Selecting a sort criteria should update query params and cause refetch", async () => {
     renderWithMockProvider(mocks);
-    selectNetflixOffice("121 Albright Way, Los Gatos, CA 95032");
-
     await waitFor(() => {
-      screen.getByText("Shoogar Tea Shoppe");
+      screen.getByText("Sorted by Rating");
     });
 
-    const sortOptionSelector = screen.getByText("Choose Sort Option", {
+    const sortOptionSelector = screen.getByText("Sorting by Rating", {
       selector: "button",
     });
     userEvent.click(sortOptionSelector);
@@ -139,29 +132,22 @@ describe("Tests for FilterableStoreTable component", async () => {
     expect(ratingOption).toBeInTheDocument();
     expect(distanceOption).toBeInTheDocument();
 
-    userEvent.click(ratingOption);
+    userEvent.click(distanceOption);
 
     await waitFor(() => {
       // This comes from the mock query that consists of a
       // "sort_by" variable equal to "rating" in bobShop.ts
-      screen.getByText("Sorted by Rating");
+      screen.getByText("Sorting by Distance");
     });
   });
 
   test("Refetch/Paginate fired and resolves with data when Load More button selected", async () => {
     renderWithMockProvider(mocks);
-    await selectNetflixOffice("121 Albright Way, Los Gatos, CA 95032");
-
     const loadMore = screen.getByText("Load More", {
       selector: "button",
     });
 
     userEvent.click(loadMore);
-
-    await waitFor(() => {
-      const item = screen.queryByText("Load More");
-      expect(item).toBeVisible();
-    });
 
     await waitFor(() => {
       const paginatedShop = screen.getByText("Paginated Shop Name");

@@ -122,7 +122,8 @@ export const mockBobaShops = {
         latitude: 37.2570376, // 121 Albright
         longitude: -121.9665658,
       },
-      offset: 2,
+      offset: 1,
+      sort_by: "rating",
     },
   },
 };

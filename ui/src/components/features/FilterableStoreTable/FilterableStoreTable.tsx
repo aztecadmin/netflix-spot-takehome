@@ -8,11 +8,15 @@ import useCustomLazyQuery from "@/components/common/hooks/useCustomLazyQuery"; /
 import RadioDropdownPicker from "@/components/common/RadioDropdownPicker";
 import ListView from "@/components/common/ListView";
 
-import StoreRow from "./components/StoreCard";
+import StoreCard from "./components/StoreCard";
 
 import { filterOptions, sortOptions } from "./configs/filterSortOptions";
 
 import "./FilterableStoreTable.css";
+
+const renderStoreCard = (item: Shop) => (
+  <StoreCard key={item.id} store={item} />
+);
 
 function FilterableStoreList() {
   const [hasFetched, setHasFetched] = useState(false);
@@ -102,10 +106,6 @@ function FilterableStoreList() {
     onLocationSelected(filterOptions[0]?.value);
   }, [onLocationSelected]);
 
-  const renderListItem = (item: Shop) => (
-    <StoreRow key={item.id} store={item} />
-  );
-
   return (
     <div
       className="filter-store-table-wrapper"
@@ -133,11 +133,9 @@ function FilterableStoreList() {
           emptyMessage={emptyMessage}
           isLoading={isLoading}
           data={(data?.getBobaShops?.shops as Shop[]) || []}
-          renderListItem={renderListItem}
+          renderListItem={renderStoreCard}
         />
-
         <button
-          // style={{ display: shouldShowLoadMoreButton ? "initial" : "none" }}
           hidden={!shouldShowLoadMoreButton}
           disabled={isLoadingMore}
           onClick={paginate}
