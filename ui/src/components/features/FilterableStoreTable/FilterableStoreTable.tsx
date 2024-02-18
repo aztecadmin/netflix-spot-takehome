@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { GET_BOBA_SHOPS_QUERY } from "@/graphql/queries";
-import { Shop } from "@/__generated__gql__/graphql";
+import { Shop, SortField } from "@/__generated__gql__/graphql";
 
 import useCustomLazyQuery from "@/components/common/hooks/useCustomLazyQuery"; //consider re-organizing hooks by domain
 
@@ -27,7 +27,8 @@ function FilterableStoreList() {
     data &&
     data.getBobaShops &&
     data.getBobaShops.total &&
-    data.getBobaShops.total > data.getBobaShops.shops.length;
+    data.getBobaShops.total > data.getBobaShops.shops.length &&
+    !isLoading;
 
   const returnedEmptyShopsList =
     data && data.getBobaShops && data.getBobaShops.shops.length === 0;
@@ -52,8 +53,7 @@ function FilterableStoreList() {
             runQuery({
               variables: {
                 coordinates: location.coordinates,
-                // @ts-expect-error TODO: Why is type check failing?
-                sort_by: defaultSortValue,
+                sort_by: defaultSortValue as SortField,
               },
             });
             setHasFetched(true);
@@ -69,9 +69,7 @@ function FilterableStoreList() {
       const sort_by = sortOptions.find((el) => el.value == v);
       if (sort_by) {
         refetch({
-          // @ts-expect-error TODO: Why is type check failing?
-          sort_by: sort_by.value,
-          // Possibly related to sort_by being defined as an enum
+          sort_by: sort_by.value as SortField,
         });
       }
     },
