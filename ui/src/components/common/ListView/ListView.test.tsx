@@ -16,8 +16,8 @@ const renderStoreCard = (item: Shop) => (
 
 afterEach(cleanup);
 
-describe("Tests for StoreTable component", async () => {
-  test("StoreTable renders a list of stores when supplied with stores list", async () => {
+describe("Tests for ListView component", async () => {
+  test("ListView renders a list of items when supplied with item list", async () => {
     render(
       <ListView
         renderListItem={renderStoreCard}
@@ -26,13 +26,13 @@ describe("Tests for StoreTable component", async () => {
         emptyMessage="No data found"
       />
     );
-    const storeList = screen.getByTestId("list-view");
+    const itemList = screen.getByTestId("list-view");
     mockBobaShops.forEach((store) => {
-      expect(storeList.textContent).toContain(store.name);
+      expect(itemList.textContent).toContain(store.name);
     });
   });
 
-  test("StoreTable displays Loading state in preference over store list", async () => {
+  test("ListView displays Loading state in preference over items", async () => {
     render(
       <ListView
         renderListItem={renderStoreCard}
@@ -45,7 +45,7 @@ describe("Tests for StoreTable component", async () => {
     expect(loadingText).to.exist;
   });
 
-  test("StoreTable displays correct empty message", async () => {
+  test("ListView displays correct empty message", async () => {
     render(
       <ListView
         renderListItem={renderStoreCard}
