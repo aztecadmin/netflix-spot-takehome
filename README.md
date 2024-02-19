@@ -14,7 +14,7 @@ I chose to use React + Typescript + [Vite](https://vitejs.dev/) for the client s
 
 ### Setting Up the Project locally
 
-I intended to create docker files for both the ui and api and a docker-compose script to host their corresponding images in a local container, but I ran into some issues with vitest and didn't want to prolong my submission.
+I intended to create a docker-compose script to host the api and ui in a local container, but I ran into some issues with Vitest and didn't want to prolong my submission.
 
 Running both the ui and api should be relatively straightforward.
 
