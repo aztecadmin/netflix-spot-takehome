@@ -45,16 +45,19 @@ function renderRadioDropdownPicker(
   return { radioDropdownPicker, mockFn };
 }
 
-async function selectOptionTestStub(radioDropdownPicker: HTMLElement) {
+export async function selectOptionTestStub(
+  radioDropdownPicker: HTMLElement,
+  optionLabel: string
+) {
   userEvent.click(radioDropdownPicker);
   await waitFor(() => {
     expect(screen.getByTestId("dropdown-options")).toBeInTheDocument();
   });
-  const optionToSelectElement = screen.getByLabelText("test label 1");
+  const optionToSelectElement = screen.getByLabelText(optionLabel);
   expect(optionToSelectElement).toBeInTheDocument();
   userEvent.click(optionToSelectElement);
 
-  await waitForElementToBeRemoved(() => screen.getByLabelText("test label 1"));
+  await waitForElementToBeRemoved(() => screen.getByLabelText(optionLabel));
 }
 
 describe("Tests for RadioDropdown component", async () => {
@@ -97,13 +100,15 @@ describe("Tests for RadioDropdown component", async () => {
 
   test("Selecting on option should trigger callback with option value", async () => {
     const { radioDropdownPicker, mockFn } = renderRadioDropdownPicker();
-    await selectOptionTestStub(radioDropdownPicker);
-    expect(mockFn).toBeCalled();
+    await selectOptionTestStub(radioDropdownPicker, "test label 1");
+    await waitFor(() => {
+      expect(mockFn).toBeCalled();
+    });
   });
 
   test("Selecting an option should show default selected message", async () => {
     const { radioDropdownPicker } = renderRadioDropdownPicker();
-    await selectOptionTestStub(radioDropdownPicker);
+    await selectOptionTestStub(radioDropdownPicker, "test label 1");
     expect(radioDropdownPicker.textContent).toContain(
       DEFAULT_MESSAGE_WHEN_SELECTED
     );

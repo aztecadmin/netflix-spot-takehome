@@ -113,6 +113,7 @@ function FilterableStoreList() {
     >
       <div className="table-radio-container">
         <RadioDropdownPicker
+          data-testid="office-dropdown-selector"
           options={filterOptions}
           defaultValue={defaultFilterValue}
           onOptionSelected={onLocationSelected}
@@ -120,6 +121,7 @@ function FilterableStoreList() {
           messageWhenSelected="Showing Stores Near"
         />
         <RadioDropdownPicker
+          data-testid="sort-dropdown-selector"
           options={sortOptions}
           defaultValue={defaultSortValue}
           onOptionSelected={onSortSelected}

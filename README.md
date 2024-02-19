@@ -16,7 +16,7 @@ I chose to use React + Typescript + [Vite](https://vitejs.dev/) for the client s
 
 I intended to create docker files for both the ui and api and a docker-compose script to host their corresponding images in a local container, but I ran into some issues with vitest and didn't want to prolong my submission.
 
-Running both the ui and api should be relatively straightforward. 
+Running both the ui and api should be relatively straightforward.
 
 **(Use Node v18.17.1 or better)**
 
@@ -25,16 +25,17 @@ Running both the ui and api should be relatively straightforward.
 2. Run `npm install` in both sub-directories (ui and api).
 
 3. Setup the correct Environment Variables
+
    1. Store your Yelp API key as an environment variable `YELP_API_KEY` in a `.env` file from within the `api` folder first before running the api server`.
    2. Point the UI to your Apollo Client by defining the `VITE_APOLLO_CLIENT_URL` in a `.env` file from within the `ui` folder first before running the UI .
 
 4. Run the project
-   1. First run the api `npm run start` from within the `api` folder (Note: You can view the Apollo graphql explorer at port `:4000` of  your local version of the app.) 
-   3. Then run the ui in dev mode: `npm run dev` from within the `ui` folder
-  
+
+   1. First run the api `npm run start` from within the `api` folder (Note: You can view the Apollo graphql explorer at port `:4000` of your local version of the app.)
+   2. Then run the ui in dev mode: `npm run dev` from within the `ui` folder
+
 5. Run UI tests
    1. Run `npm run test` from within the `ui` directory.
-
 
 ### How I spent my time
 
@@ -44,12 +45,13 @@ My main concerns were using accurate types for my data on the UI, file structure
 
 I would have liked to spent more time doing the following
 
-- Improving tests by adding more coverage and using more robust methods of accessing html elements within tests;
-- Creating more modularity around constant names throughout the app
-- Implementing error handling throughout the app
-- Implementing a style theme
-- Making the app mobile-friendly and responsive
-- Further modularizing aspects of how the code fetches "config" data: for example, I currently hardcode the Netflix locations within the UI, but it would be better to fetch this and potentially other configuration related items from the backend upon startup of the app.
+- Improve tests by adding more coverage and using more robust methods of accessing html elements within tests;
+- Come up with a more scaleable/re-usable way of generating mock data and mock queries for tests
+- Create more modularity around constant names throughout the app
+- Implement error handling throughout the app
+- Implement a style theme
+- Make the app mobile-friendly and responsive
+- Further modularize aspects of how the code fetches "config" data: for example, I currently hardcode the Netflix locations within the UI, but it would be better to fetch this and potentially other configuration related items from the backend upon startup of the app.
 - Further modularize my different table components depending on additional use cases that the app needs to support (e.g. the user can search more than just boba).
 - Choose and stick to a correct naming convention for "Store" and "Shop". (At some point, I started using these terms interchangeably and made a note to fix this but never got back to it.)
 

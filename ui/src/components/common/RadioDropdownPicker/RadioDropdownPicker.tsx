@@ -15,6 +15,7 @@ export type RadioDropdownPickerProps = {
   messageWhenUnselected?: string;
   disabled?: boolean;
   defaultValue?: string;
+  "data-testid"?: string;
 };
 
 function RadioDropdownPicker({
@@ -24,6 +25,7 @@ function RadioDropdownPicker({
   messageWhenUnselected,
   disabled,
   defaultValue,
+  ...rest
 }: RadioDropdownPickerProps) {
   const [selectedOption, setSelectedOption] = useState<string | undefined>(
     defaultValue
@@ -54,7 +56,8 @@ function RadioDropdownPicker({
     <div className="dropdown" data-testid="dropdown" ref={dropdownRef}>
       <button
         className="dropdown-selector"
-        data-testid="dropdown-btn-selector"
+        // data-testid="dropdown-btn-selector"
+        data-testid={rest["data-testid"] || "dropdown-btn-selector"}
         onClick={toggleDropdown}
         disabled={disabled}
       >
@@ -67,7 +70,11 @@ function RadioDropdownPicker({
         }`}
       </button>
       {isDropdownVisible && (
-        <div className="dropdown-options" data-testid="dropdown-options">
+        <div
+          className="dropdown-options"
+          data-testid="dropdown-options"
+          role="listbox"
+        >
           {options.map((detail) => (
             <label key={detail.value}>
               <input
@@ -79,6 +86,7 @@ function RadioDropdownPicker({
                     : detail.value == defaultValue
                 }
                 onChange={handleChange}
+                role="option"
               />
               {detail.label}
             </label>

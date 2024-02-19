@@ -12,10 +12,27 @@ import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 
 import FilterableStoreTable from ".";
 
+import { mockBobaShops } from "@/graphql/mocks/bobaShops";
 import { GET_BOBA_SHOPS_QUERY } from "@/graphql/queries";
-import { mockBobaShops } from "@/graphql/mocks";
 
 beforeEach(cleanup);
+
+// Mock builder function which crunches
+// an array of known custom mock flavors i.e. [WITH_LOCATION_FILTER,WITH_LOACTION_FILTER_AND_SORT,etc...]
+const mocks = Object.keys(mockBobaShops).map((mock) => {
+  return {
+    request: {
+      query: GET_BOBA_SHOPS_QUERY,
+      // @ts-expect-error We know the key "mock" exists based on how we're defining it in the above map
+      variables: mockBobaShops[mock].variables,
+    },
+    // @ts-expect-error We know the key "mock" exists based on how we're defining it in the above map
+    result: mockBobaShops[mock].result,
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+}) as ReadonlyArray<MockedResponse<any, any>>;
+
+export default mocks;
 
 function renderWithMockProvider(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,57 +62,33 @@ async function selectNetflixOffice(labelText: string) {
   });
 }
 
-// We could create a mock builder function which crunches
-// an array of known custom mock flavors i.e. [WITH_LOCATION_FILTER,WITH_LOACTION_FILTER_AND_SORT,etc...]
-const mocks = [
-  {
-    request: {
-      query: GET_BOBA_SHOPS_QUERY,
-      variables: mockBobaShops.WITH_SORT_BY_DISTANCE.variables,
-    },
-    result: mockBobaShops.WITH_SORT_BY_DISTANCE.result,
-  },
-  {
-    request: {
-      query: GET_BOBA_SHOPS_QUERY,
-      variables: mockBobaShops.WITH_SORT_BY_RATING.variables,
-    },
-    result: mockBobaShops.WITH_SORT_BY_RATING.result,
-  },
-  {
-    request: {
-      query: GET_BOBA_SHOPS_QUERY,
-      variables: mockBobaShops.WITH_EMPTY_DATA_LIST.variables,
-    },
-    result: mockBobaShops.WITH_EMPTY_DATA_LIST.result,
-  },
-  {
-    request: {
-      query: GET_BOBA_SHOPS_QUERY,
-      variables: mockBobaShops.PAGINATE_WITH_SORT_BY_RATING.variables,
-    },
-    result: mockBobaShops.PAGINATE_WITH_SORT_BY_RATING.result,
-  },
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-] as ReadonlyArray<MockedResponse<any, any>>;
-
 describe("Tests for FilterableStoreTable component", async () => {
   test("Selecting a Netflix office should cause data to load", async () => {
-    renderWithMockProvider(mocks);
+    // Note: The FilterableStoreTable automatically selects the first Netflix campus on load
+    // So there is no need to mock user selection event of Netflix campus
+    // Instead we test to make sure the correct data eventually appears
+    // The correct data is determined by and the result of one of the mock queries in our mocks list
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <FilterableStoreTable />
+      </MockedProvider>
+    );
+
+    const sortedByDistanceCard = await screen.findByText(
+      "Store Card Sorted by Rating"
+    );
     await waitFor(() => {
-      // TODO: "Sorted by Rating" should be a default (and overrideable) prop passed to FilterablStoreTable
-      screen.getByText("Sorted by Rating");
+      expect(sortedByDistanceCard).toBeInTheDocument();
     });
   });
 
   test("Load More Button should appear for paginated responses", async () => {
     renderWithMockProvider(mocks);
+    const loadButton = screen.getByText("Load More", {
+      selector: "button",
+    });
     await waitFor(() => {
-      const item = screen.queryByText("Load More");
-      const store = screen.queryByText("Sorted by Rating");
-      expect(item).toBeVisible();
-      expect(store).toBeVisible();
+      expect(loadButton).toBeVisible();
     });
   });
 
@@ -121,7 +114,12 @@ describe("Tests for FilterableStoreTable component", async () => {
       selector: "button",
     });
 
-    userEvent.click(sortOptionSelector);
+    await waitFor(() => {
+      expect(sortOptionSelector).not.toBeNull();
+    });
+
+    if (sortOptionSelector) userEvent.click(sortOptionSelector);
+
     // TODO: Should rely on pre-defined enums for sort options
     const ratingOption = await screen.findByLabelText("Rating");
     const distanceOption = await screen.findByLabelText("Distance");
@@ -137,16 +135,16 @@ describe("Tests for FilterableStoreTable component", async () => {
       expect(distanceOption).toBeChecked();
     });
 
-    const distanceMessage = screen.getByText("Sorting by Distance", {
+    const distanceBtn = await screen.queryByText("Sorting by Distance", {
       selector: "button",
     });
 
     await waitFor(() => {
-      expect(distanceMessage).toBeInTheDocument();
+      expect(distanceBtn).toBeInTheDocument();
     });
 
-    const sortedByDistanceCard = screen.getByText(
-      "Store Card Sorted by Rating"
+    const sortedByDistanceCard = await screen.queryByText(
+      "Store Card Sorted by Distance"
     );
     await waitFor(() => {
       // This comes from the mock query that consists of a
@@ -156,14 +154,16 @@ describe("Tests for FilterableStoreTable component", async () => {
 
   test("Refetch/Paginate fired and resolves with data when Load More button selected", async () => {
     renderWithMockProvider(mocks);
-    const loadMore = screen.getByText("Load More", {
+    const loadMore = screen.queryByText("Load More", {
       selector: "button",
     });
 
-    userEvent.click(loadMore);
+    expect(loadMore).not.toBeNull();
+
+    if (loadMore) userEvent.click(loadMore);
 
     await waitFor(() => {
-      const paginatedShop = screen.getByText("Paginated Shop Name");
+      const paginatedShop = screen.getByText("Store Card Paginated");
       expect(paginatedShop).toBeInTheDocument();
     });
   });
