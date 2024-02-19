@@ -7,7 +7,7 @@ import StoreCard from ".";
 import { mockBobaShops as mockBobaShopsBody } from "@/graphql/mocks";
 
 const mockBobaShops =
-  mockBobaShopsBody.WITH_LOCATION_FILTER.result.data.getBobaShops.shops;
+  mockBobaShopsBody.WITH_SORT_BY_RATING.result.data.getBobaShops.shops;
 
 afterEach(cleanup);
 

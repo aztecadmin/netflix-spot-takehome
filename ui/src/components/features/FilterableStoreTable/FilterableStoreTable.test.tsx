@@ -39,7 +39,10 @@ async function selectNetflixOffice(labelText: string) {
   const option = await screen.findByLabelText(labelText);
 
   await userEvent.click(option);
-  expect(option).toBeChecked();
+
+  return waitFor(() => {
+    expect(option).toBeChecked();
+  });
 }
 
 // We could create a mock builder function which crunches
@@ -48,32 +51,30 @@ const mocks = [
   {
     request: {
       query: GET_BOBA_SHOPS_QUERY,
-      variables: mockBobaShops.WITH_LOCATION_FILTER.variables,
+      variables: mockBobaShops.WITH_SORT_BY_DISTANCE.variables,
     },
-    result: mockBobaShops.WITH_LOCATION_FILTER.result,
+    result: mockBobaShops.WITH_SORT_BY_DISTANCE.result,
   },
   {
     request: {
       query: GET_BOBA_SHOPS_QUERY,
-      variables:
-        mockBobaShops.WITH_LOACTION_FILTER_AND_SORT_BY_RATING.variables,
+      variables: mockBobaShops.WITH_SORT_BY_RATING.variables,
     },
-    result: mockBobaShops.WITH_LOACTION_FILTER_AND_SORT_BY_RATING.result,
+    result: mockBobaShops.WITH_SORT_BY_RATING.result,
   },
   {
     request: {
       query: GET_BOBA_SHOPS_QUERY,
-      variables:
-        mockBobaShops.WITH_LOACTION_FILTER_AND_EMPTY_DATA_LIST.variables,
+      variables: mockBobaShops.WITH_EMPTY_DATA_LIST.variables,
     },
-    result: mockBobaShops.WITH_LOACTION_FILTER_AND_EMPTY_DATA_LIST.result,
+    result: mockBobaShops.WITH_EMPTY_DATA_LIST.result,
   },
   {
     request: {
       query: GET_BOBA_SHOPS_QUERY,
-      variables: mockBobaShops.PAGINATE_WITH_LOCATION_FILTER.variables,
+      variables: mockBobaShops.PAGINATE_WITH_SORT_BY_RATING.variables,
     },
-    result: mockBobaShops.PAGINATE_WITH_LOCATION_FILTER.result,
+    result: mockBobaShops.PAGINATE_WITH_SORT_BY_RATING.result,
   },
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -82,62 +83,74 @@ const mocks = [
 describe("Tests for FilterableStoreTable component", async () => {
   test("Selecting a Netflix office should cause data to load", async () => {
     renderWithMockProvider(mocks);
-    // await selectNetflixOffice("5808 Sunset Blvd, Los Angeles, CA 90028");
     await waitFor(() => {
       // TODO: "Sorted by Rating" should be a default (and overrideable) prop passed to FilterablStoreTable
       screen.getByText("Sorted by Rating");
     });
-    screen.debug();
   });
 
   test("Load More Button should appear for paginated responses", async () => {
     renderWithMockProvider(mocks);
-    // await selectNetflixOffice("121 Albright Way, Los Gatos, CA 95032");
-
     await waitFor(() => {
       const item = screen.queryByText("Load More");
+      const store = screen.queryByText("Sorted by Rating");
       expect(item).toBeVisible();
+      expect(store).toBeVisible();
     });
   });
 
   test("Load More Button should not appear if data length is less than total count of Yelp data", async () => {
     renderWithMockProvider(mocks);
-    await selectNetflixOffice("888 Broadway, New York, NY 10003");
-    await waitFor(
-      () => {
-        const loadButton = screen.getByText("Load More", {
-          selector: "button",
-        });
 
-        expect(loadButton).not.toBeVisible();
-      },
-      { timeout: 3000 }
-    );
+    await waitFor(() => {
+      selectNetflixOffice("888 Broadway, New York, NY 10003");
+    });
+
+    const loadButton = screen.getByText("Load More", {
+      selector: "button",
+    });
+
+    await waitFor(() => {
+      expect(loadButton).not.toBeVisible();
+    });
   });
 
   test("Selecting a sort criteria should update query params and cause refetch", async () => {
     renderWithMockProvider(mocks);
-    await waitFor(() => {
-      screen.getByText("Sorted by Rating");
-    });
-
     const sortOptionSelector = screen.getByText("Sorting by Rating", {
       selector: "button",
     });
+
     userEvent.click(sortOptionSelector);
     // TODO: Should rely on pre-defined enums for sort options
     const ratingOption = await screen.findByLabelText("Rating");
     const distanceOption = await screen.findByLabelText("Distance");
 
-    expect(ratingOption).toBeInTheDocument();
-    expect(distanceOption).toBeInTheDocument();
+    await waitFor(() => {
+      expect(ratingOption).toBeInTheDocument();
+      expect(distanceOption).toBeInTheDocument();
+    });
 
     userEvent.click(distanceOption);
 
     await waitFor(() => {
+      expect(distanceOption).toBeChecked();
+    });
+
+    const distanceMessage = screen.getByText("Sorting by Distance", {
+      selector: "button",
+    });
+
+    await waitFor(() => {
+      expect(distanceMessage).toBeInTheDocument();
+    });
+
+    const sortedByDistanceCard = screen.getByText(
+      "Store Card Sorted by Rating"
+    );
+    await waitFor(() => {
       // This comes from the mock query that consists of a
-      // "sort_by" variable equal to "rating" in bobShop.ts
-      screen.getByText("Sorting by Distance");
+      expect(sortedByDistanceCard).toBeInTheDocument();
     });
   });
 

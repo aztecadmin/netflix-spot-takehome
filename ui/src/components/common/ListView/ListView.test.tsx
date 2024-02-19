@@ -8,7 +8,7 @@ import { mockBobaShops as mockBobaShopsBody } from "@/graphql/mocks";
 import { Shop } from "@/__generated__gql__/graphql";
 
 const mockBobaShops =
-  mockBobaShopsBody.WITH_LOCATION_FILTER.result.data.getBobaShops.shops;
+  mockBobaShopsBody.WITH_SORT_BY_RATING.result.data.getBobaShops.shops;
 
 const renderStoreCard = (item: Shop) => (
   <StoreCard key={item.id} store={item} />
