@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { GET_BOBA_SHOPS_QUERY } from "@/graphql/queries";
 import { Shop, SortField } from "@/__generated__gql__/graphql";
 
-import useCustomLazyQuery from "@/components/common/hooks/useCustomLazyQuery"; //consider re-organizing hooks by domain
+import useCustomLazyQuery from "@/hooks/useCustomLazyQuery"; //consider re-organizing hooks by domain
 
 import RadioDropdownPicker from "@/components/common/RadioDropdownPicker";
 import ListView from "@/components/common/ListView";

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import useOutsideClick from "@/components/common/hooks/useOutsideClick";
+import useOutsideClick from "@/hooks/useOutsideClick/useOutsideClick";
 
 import "./RadioDropdownPicker.css";
 
