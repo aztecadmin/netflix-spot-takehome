@@ -59,9 +59,11 @@ I would have liked to spent more time doing the following
 
 Although the project's scope is relatively small, I chose to employ best practices for my file structure that can accommodate feature and team growth. My approach is a hybrid between Domain Driven Design and [Component Driven Design](https://www.componentdriven.org/).
 
-As such, I have two main sub to directories components: common, which as it sounds is where I store simple reusable components (such as the Radio dropdown picker component), and "features" which is where I store higher level components that drive business logic.
+As such, I have two main sub-directories: 
+- `components/common`, which as it sounds is where I store simple reusable components (such as the Radio dropdown picker component)
+- `components/features` which is where I store higher level components that drive business logic.
 
-I store sub-components within a features "component" directory if the feature depends on bespoke components which won't be used elsewhere in the app.
+I place feature-specific sub-components in the component directory of the respective feature (e.g., `/featureA/components/`) when these sub-components are custom-made for the feature and are not intended for reuse in other parts of the application.
 
 ### Tests
 
