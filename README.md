@@ -1,4 +1,4 @@
-# Netflix Boba Finder
+# Boba Finder
 
 **Author:** Amanuel Zeryihun
 
@@ -6,7 +6,7 @@
 
 ## About the project
 
-This project is submitted for review as part of the interview process for the L5 senior full stack engineer position at Netflix. The code was written entirely by I, Amanuel Zeryihun.
+Full stack web application demonstrating UI best practices for modularity, component testing, file structure, state management, and general software design.
 
 ### Frameworks
 
@@ -37,24 +37,6 @@ Running both the ui and api should be relatively straightforward.
 5. Run UI tests
    1. Run `npm run test` from within the `ui` directory.
 
-### How I spent my time
-
-My time was spent mainly on the UI (70%), although setting up the Apollo server took meaningful effort.
-
-My main concerns were using accurate types for my data on the UI, file structure management, creating a healthy level of modularity in the component design and testing.
-
-I would have liked to spent more time doing the following
-
-- Improve tests by adding more coverage and using more robust methods of accessing html elements within tests;
-- Come up with a more scaleable/re-usable way of generating mock data and mock queries for tests
-- Create more modularity around constant names throughout the app
-- Implement error handling throughout the app
-- Implement a style theme
-- Make the app mobile-friendly and responsive
-- Further modularize aspects of how the code fetches "config" data: for example, I currently hardcode the Netflix locations within the UI, but it would be better to fetch this and potentially other configuration related items from the backend upon startup of the app.
-- Further modularize my different table components depending on additional use cases that the app needs to support (e.g. the user can search more than just boba).
-- Choose and stick to a correct naming convention for "Store" and "Shop". (At some point, I started using these terms interchangeably and made a note to fix this but never got back to it.)
-
 ### Project Structure
 
 Although the project's scope is relatively small, I chose to employ best practices for my file structure that can accommodate feature and team growth. My approach is a hybrid between Domain Driven Design and [Component Driven Design](https://www.componentdriven.org/).
@@ -78,9 +60,3 @@ I wrote tests for all common and feature level components. I wrote the most exte
 I chose to leverage Apollo GraphQL (server and client) to pass data between the server and client.
 
 Apollo was extremely useful. I was able to generate typescript types that were consumable on the frontend which made the development process very comfortable.
-
-### Learnings
-
-I really enjoyed the process of re-familiarizing myself with Apollo. I see a lot of benefit (and some drawbacks) to relying on typed data structures that the client and api can share.
-
-As always, part of the dance in this project entailed being mindful of how to balance the desire to modularize and optimize data structures with time. For example, I intentionally didn't leverage React's context or reducer APIs because, quite frankly, the scope of this project didn't require it. It's perfectly fine to have a parent component manage state for its children so long as this doesn't lead to the need for excessive prop drilling. Also, I found myself realizing some inefficiencies in my design after creating/implementing it. This is normal in the real world. The key is to assess how limiting those inoptimalities are and re-design when necessary.
