@@ -2,7 +2,7 @@
 
 **Author:** Amanuel Zeryihun
 
-**Live Link:** https://urchin-app-vsz2b.ondigitalocean.app/
+**Live Link:** https://king-prawn-app-wqtdz.ondigitalocean.app/
 
 ## About the project
 
